@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-lUkihArD1bj8tD1pA7NNe6d+VoifEIC97h8lEIfLg24=' 'sha256-1EN/afHTdrCS6TAMXlu9f8HZ24yXTrKq9OI/QttuSMM=' 'sha256-nG9a3NGWdEFV6Jw/JbZGr8aljykvrNX14tRlq8Q48s4='; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; font-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20120%20120%22%3E%3Cg%20transform=%22translate%2860%2060%29%20scale%281.3%29%20translate%28-66%20-57%29%22%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M38%2022%20V92%20M38%2060%20C38%2040%2074%2040%2074%2062%20V84%20C74%2096%2084%2098%2092%2090%22%20stroke=%22%230b0c10%22%20stroke-opacity=%22.55%22%20stroke-width=%2212.5%22/%3E%3Cpath%20d=%22M38%2022%20V92%20M38%2060%20C38%2040%2074%2040%2074%2062%20V84%20C74%2096%2084%2098%2092%2090%22%20stroke=%22%23f1f2f5%22%20stroke-width=%227%22/%3E%3Ccircle%20cx=%2294%22%20cy=%2288%22%20r=%229%22%20fill=%22%230b0c10%22%20fill-opacity=%22.55%22%20stroke=%22none%22/%3E%3Ccircle%20cx=%2294%22%20cy=%2288%22%20r=%226%22%20fill=%22%23e3b85c%22%20stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hilo</title></head><body style="margin:0">
+<html lang="es"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-lUkihArD1bj8tD1pA7NNe6d+VoifEIC97h8lEIfLg24=' 'sha256-1EN/afHTdrCS6TAMXlu9f8HZ24yXTrKq9OI/QttuSMM=' 'sha256-nG9a3NGWdEFV6Jw/JbZGr8aljykvrNX14tRlq8Q48s4=' 'sha256-bIS2i1nGdVhInLyznVfpzxqOqzL/kCXijCTeTGgLXi8='; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://hilo-ia.benjamin-diazcatania.workers.dev; font-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20120%20120%22%3E%3Cg%20transform=%22translate%2860%2060%29%20scale%281.3%29%20translate%28-66%20-57%29%22%20fill=%22none%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M38%2022%20V92%20M38%2060%20C38%2040%2074%2040%2074%2062%20V84%20C74%2096%2084%2098%2092%2090%22%20stroke=%22%230b0c10%22%20stroke-opacity=%22.55%22%20stroke-width=%2212.5%22/%3E%3Cpath%20d=%22M38%2022%20V92%20M38%2060%20C38%2040%2074%2040%2074%2062%20V84%20C74%2096%2084%2098%2092%2090%22%20stroke=%22%23f1f2f5%22%20stroke-width=%227%22/%3E%3Ccircle%20cx=%2294%22%20cy=%2288%22%20r=%229%22%20fill=%22%230b0c10%22%20fill-opacity=%22.55%22%20stroke=%22none%22/%3E%3Ccircle%20cx=%2294%22%20cy=%2288%22%20r=%226%22%20fill=%22%23e3b85c%22%20stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hilo</title></head><body style="margin:0">
 <div id="hilo-connected">
 <style>
 #hilo-connected{--bg:#16161d;--surface:#20202a;--ink:#edeaf4;--dim:#b0aabd;--line:#3d394a;--accent:#baa5ed;--mint:#a9d4c2;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,sans-serif;min-height:100vh}#hilo-connected *{box-sizing:border-box}#hilo-connected button,#hilo-connected textarea,#hilo-connected input{font:inherit}#hilo-connected button{color:inherit;background:transparent;border:1px solid var(--line);border-radius:9px;padding:9px 13px;cursor:pointer}#hilo-connected button:hover{background:#302b40}#hilo-connected button:focus-visible,#hilo-connected textarea:focus-visible{outline:2px solid var(--mint);outline-offset:4px}#hilo-connected button[aria-pressed=true]{background:#332b46;border-color:var(--accent)}#hilo-connected .primary{background:var(--accent);color:#211b2c;border-color:var(--accent)}#hilo-connected header{display:flex;align-items:center;gap:18px;padding:18px 26px;border-bottom:1px solid var(--line);flex-wrap:wrap}#hilo-connected .brand{font:italic 28px Georgia,serif}#hilo-connected .muted,#hilo-connected small{color:var(--dim)}#hilo-connected small{font-size:12px}#hilo-connected .grow{flex:1}#hilo-connected nav.tabs{display:flex;gap:7px;padding:18px 26px;flex-wrap:wrap}#hilo-connected .workspace{max-width:1400px;margin:auto;padding:0 26px 24px}#hilo-connected .layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:24px;align-items:start}#hilo-connected .map-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:44px}#hilo-connected h1{font-size:25px;font-weight:500;margin:12px 0}#hilo-connected h2{font-size:20px;font-weight:500;margin:8px 0 15px}#hilo-connected h3{font-size:16px;font-weight:500;margin:8px 0}#hilo-connected p{margin:0 0 16px}#hilo-connected .graph{height:430px;position:relative;background-image:radial-gradient(#33303e 1px,transparent 1px);background-size:24px 24px}#hilo-connected .graph svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}#hilo-connected .node{position:absolute;transform:translate(-50%,-50%);width:166px;padding:10px 5px;text-align:center;border:0;background:var(--bg);font-size:14px}#hilo-connected .node:before{content:'';display:block;width:13px;height:13px;border-radius:50%;background:var(--accent);margin:0 auto 8px}#hilo-connected .node.leaf:before{width:8px;height:8px;background:#8d879a}#hilo-connected .node.active:before{background:var(--mint);box-shadow:0 0 0 5px #a9d4c219}#hilo-connected .node[aria-pressed=true]{background:var(--bg);border:0;color:var(--mint)}#hilo-connected .node small{display:block;margin-top:3px;font-size:11px}#hilo-connected .branch-nav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}#hilo-connected .branch-nav button{font-size:12px;padding:5px 9px}#hilo-connected .inspector{background:var(--surface);border-radius:14px;padding:22px;min-width:0}#hilo-connected .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent)}#hilo-connected .actions{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}#hilo-connected .actions button{font-size:13px}#hilo-connected .next{border-left:2px solid #7a9b88;padding-left:12px;margin:20px 0}#hilo-connected .resume{border-top:1px solid var(--line);padding:16px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:#1d1c26}#hilo-connected .resume p{margin:0;flex:1}#hilo-connected .resume strong{font-weight:500}#hilo-connected .reader{background:#e9e6dc;color:#30392f;padding:30px;border-radius:8px;min-width:0}#hilo-connected .reader .eyebrow,#hilo-connected .reader small{color:#626b5d}#hilo-connected blockquote{white-space:pre-wrap;overflow-wrap:anywhere;font:16px/1.8 Georgia,serif;margin:20px 0;padding:0}#hilo-connected .reader button{color:#34442f;border-color:#aab49f}#hilo-connected .reader button:hover{background:#d6ddca}#hilo-connected details{margin:18px 0}#hilo-connected summary{cursor:pointer;color:var(--dim)}#hilo-connected .reader summary{color:#5a6854}#hilo-connected .read-short{max-height:330px;overflow:auto;padding-right:14px}#hilo-connected .item-link{display:block;width:100%;text-align:left;margin:8px 0}#hilo-connected .route{border-left:1px solid #776a8e;margin:20px 0 20px 14px;padding-left:25px}#hilo-connected .event{position:relative;margin:0 0 24px}#hilo-connected .event:before{content:'';position:absolute;left:-30px;top:13px;width:9px;height:9px;background:var(--mint);border-radius:50%}#hilo-connected .event button{display:block;border:0;text-align:left;padding:6px 0}#hilo-connected .event small{display:block}#hilo-connected .empty{padding:35px 0;color:var(--dim);max-width:530px}#hilo-connected dialog{color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:14px;width:min(800px,calc(100% - 24px));padding:26px;max-height:85vh;overflow:auto}#hilo-connected dialog::backdrop{background:#0c0a12ba}#hilo-connected .close{float:right}#hilo-connected textarea{width:100%;min-height:120px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:14px}#hilo-connected .entry{border-bottom:1px solid var(--line);padding:18px 0;white-space:pre-wrap;overflow-wrap:anywhere}#hilo-connected .source-full{white-space:pre-wrap;overflow-wrap:anywhere}#hilo-connected .notice{font-size:12px;color:var(--mint);padding:8px 26px;min-height:34px}#hilo-connected [hidden]{display:none!important}@media(max-width:800px){#hilo-connected .layout{grid-template-columns:1fr}#hilo-connected .graph{height:410px}#hilo-connected .inspector{padding:20px}}@media(max-width:470px){#hilo-connected .workspace{padding:0 15px 20px}#hilo-connected .graph{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 0}#hilo-connected .graph svg{display:none}#hilo-connected .node{position:static;transform:none;width:auto;font-size:13px}#hilo-connected .reader{padding:20px}#hilo-connected header{padding:16px}#hilo-connected nav.tabs{padding:14px}#hilo-connected .resume{padding:15px}}
@@ -183,7 +183,7 @@ if(!blocked)save();})();
 </div>
 <div id="hilo-brain">
 <canvas tabindex="0" id="c" aria-label="Mapa de tus asuntos"></canvas>
-<div class="top"><div class="brand"><b>hilo</b><span id="brain-date"></span></div><input class="search" id="q" placeholder="Buscar…" aria-label="Buscar"><button id="brain-menu-button" aria-label="Más opciones" aria-expanded="false">⋯</button></div>
+<div class="top"><div class="brand"><b>hilo</b><span id="brain-date"></span></div><input class="search" id="q" placeholder="Buscar…" aria-label="Buscar"><button id="ia-open">Asistente</button><button id="brain-menu-button" aria-label="Más opciones" aria-expanded="false">⋯</button></div>
 <div class="next" id="next"><small>Lo siguiente</small><h1 id="nTitle"></h1><p id="nWhy"></p>
   <div class="acts"><button id="bDone">Hecho</button><button class="q" id="bLater">Ahora no</button><button class="q" id="bOpen">Abrir</button></div></div>
 <div class="cap" id="capbox">
@@ -550,4 +550,137 @@ g('brain-feedback').addEventListener('click',()=>{const m=g('brain-menu');if(m)m
 t.addEventListener('input',()=>{try{localStorage.setItem(K,t.value)}catch(e){}});
 g('hf-close').addEventListener('click',()=>d.close?d.close():d.removeAttribute('open'));
 g('hf-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(msg());g('hf-note').textContent='Copiado. Pégalo en un mensaje y mándalo.'}catch(e){t.select();g('hf-note').textContent='Selecciona el texto y cópialo (Ctrl+C).'}});
-g('hf-dl').addEventListener('click',()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([msg()],{type:'text/plain;charset=utf-8'}));a.download='opinion-hilo.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});})();</script></body></html>
+g('hf-dl').addEventListener('click',()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([msg()],{type:'text/plain;charset=utf-8'}));a.download='opinion-hilo.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});})();</script><dialog id="ia-dlg" aria-labelledby="ia-t"><div class="ia-h"><h2 id="ia-t">Asistente</h2><span class="ia-sp"></span><button id="ia-new" class="ia-g" title="Conversación nueva">Nueva</button><button id="ia-gear" class="ia-g" aria-label="Ajustes">Ajustes</button><button id="ia-close" class="ia-g">Cerrar</button></div>
+<div id="ia-setup" hidden><label for="ia-code">Código de invitación</label><input id="ia-code" autocomplete="off" spellcheck="false"><label for="ia-hide">Nombres que quieres ocultar (separados por comas)</label><textarea id="ia-hide" rows="2" placeholder="Ej.: nombres de familiares, de tu empresa…"></textarea><label class="ia-c"><input type="checkbox" id="ia-consent"> Entiendo que lo que escribo y mis asuntos viajan, ocultando los datos personales detectables, por un servidor intermediario hasta Claude para poder responderme. El intermediario no guarda el contenido. Evita datos muy sensibles (documentos, cuentas, salud).</label><button id="ia-save">Guardar</button></div>
+<div id="ia-log" role="log" aria-live="polite"></div><div id="ia-stat" role="status"></div>
+<div class="ia-row"><textarea id="ia-in" rows="2" placeholder="Escribe aquí. Enter envía, Mayús+Enter salta de línea." aria-label="Mensaje"></textarea><button id="ia-send">Enviar</button></div></dialog>
+<style>#ia-open{border:1px solid #2c2f35;background:#1b1d21;color:#e8e9ec;border-radius:8px;padding:8px 14px;min-height:44px;cursor:pointer;font:inherit}
+#ia-dlg{background:#141518;color:#e8e9ec;border:1px solid #24262b;border-radius:10px;width:min(680px,94vw);height:min(80vh,720px);padding:16px;flex-direction:column;gap:8px}#ia-dlg[open]{display:flex}#ia-dlg::backdrop{background:rgba(0,0,0,.6)}
+#ia-dlg .ia-h{display:flex;gap:8px;align-items:center}#ia-dlg h2{margin:0;font-size:18px}#ia-dlg .ia-sp{flex:1}
+#ia-dlg button{background:#e3a13b;color:#1a1405;border:0;border-radius:6px;padding:9px 14px;min-height:44px;cursor:pointer;font:inherit;font-weight:600}#ia-dlg button.ia-g{background:#23262c;color:#e8e9ec;font-weight:400}#ia-dlg button:disabled{opacity:.5}
+#ia-setup{background:#0f1012;border:1px solid #24262b;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;font-size:13px}#ia-setup[hidden]{display:none}#ia-setup input,#ia-dlg textarea{background:#0b0c0e;color:#e8e9ec;border:1px solid #24262b;border-radius:6px;padding:9px;font:inherit}.ia-c{display:flex;gap:8px;color:#b9bcc3}
+#ia-log{flex:1;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:4px}.ia-m{padding:9px 12px;border-radius:10px;max-width:88%;white-space:pre-wrap;line-height:1.45}.ia-u{align-self:flex-end;background:#2b3f5c}.ia-a{align-self:flex-start;background:#1d1f24}.ia-s{align-self:center;color:#8a8e96;font-size:13px}
+.ia-cards{display:flex;flex-direction:column;gap:8px}.ia-card{border:1px solid #2c2f35;border-radius:8px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.ia-card pre{white-space:pre-wrap;margin:6px 0;width:100%;font:inherit}.ia-card.ia-done{opacity:.6}
+#ia-stat{font-size:12px;color:#8a8e96;min-height:16px}.ia-row{display:flex;gap:8px}.ia-row textarea{flex:1;resize:none}</style>
+<script>(function(){
+const g=id=>document.getElementById(id),CORE=window.HiloCore,URL_='https://hilo-ia.benjamin-diazcatania.workers.dev',CK='hilo-ia-config';
+if(!CORE||!g('ia-dlg'))return;
+let cfg={code:'',hide:'',consent:false};try{Object.assign(cfg,JSON.parse(localStorage.getItem(CK)||'{}'))}catch(e){}
+const saveCfg=()=>{try{localStorage.setItem(CK,JSON.stringify(cfg))}catch(e){}};
+const E=(tag,txt,cls)=>{const n=document.createElement(tag);if(txt!=null)n.textContent=txt;if(cls)n.className=cls;return n};
+const slug=t=>String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'asunto';
+const isDate=d=>/^\d{4}-\d{2}-\d{2}$/.test(d||'');
+/* ---------- redacción local ---------- */
+function makeRedactor(){
+  const map=new Map(),byKey=new Map(),cnt={};
+  const ph=(kind,orig)=>{const k=kind+'|'+orig.toLowerCase();if(byKey.has(k))return byKey.get(k);cnt[kind]=(cnt[kind]||0)+1;const p='['+kind+'_'+cnt[kind]+']';byKey.set(k,p);map.set(p,orig);return p};
+  const names=()=>cfg.hide.split(/[,\n]/).map(s=>s.trim()).filter(s=>s.length>1).sort((a,b)=>b.length-a.length);
+  const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const dateLike=s=>/^\d{4}-\d{2}-\d{2}$/.test(s)||/^\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}$/.test(s);
+  return {
+    out(t){
+      t=String(t);
+      for(const n of names())t=t.replace(new RegExp('(?<![\\p{L}\\p{N}])'+esc(n)+'(?![\\p{L}\\p{N}])','giu'),m=>ph('PERSONA',m));
+      t=t.replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g,m=>ph('EMAIL',m));
+      t=t.replace(/\b[A-Z]{2}\d{2}(?:[ ]?[A-Z0-9]{4}){3,7}(?:[ ]?[A-Z0-9]{1,4})?\b/g,m=>ph('CUENTA',m));
+      t=t.replace(/\b[XYZ]?\d{7,8}[A-Za-z]\b/g,m=>ph('DOC',m));
+      t=t.replace(/\+?\d[\d\s().-]{7,}\d/g,m=>{if(dateLike(m.trim())||m.replace(/\D/g,'').length<9)return m;return ph('TEL',m)});
+      t=t.replace(/\b\d{6,}\b/g,m=>ph('NUM',m));
+      return t;
+    },
+    back(t){return String(t).replace(/\[(?:PERSONA|EMAIL|CUENTA|DOC|TEL|NUM)_\d+\]/g,m=>map.has(m)?map.get(m):m)}
+  };
+}
+let R=makeRedactor(),hist=[],aliasToId=new Map(),busy=false;
+/* ---------- contexto mínimo (sin ids reales) ---------- */
+function buildContext(){
+  aliasToId=new Map();let n=0;const out=[];
+  for(const gr of CORE.snapshot()){
+    const items=[];
+    for(const it of gr.items.slice(0,40)){
+      if(n>=80)break;n++;const a='a'+n;aliasToId.set(a,it.id);
+      const st=(CORE.stored(it.id).steps||it.steps||[]).slice(0,6).map(s=>(s.done?'[x] ':'[ ] ')+String(s.t||'').slice(0,100));
+      items.push({ref:a,titulo:String(it.title||'').slice(0,120),estado:it.status,prioridad:it.priority||'',siguiente:String(it.next||'').slice(0,120),fecha:it.due||'',espera:it.waitingFor||'',resumen:String(it.summary||'').slice(0,200),pasos:st});
+    }
+    out.push({tema:gr.name,asuntos:items});
+  }
+  return {text:R.out(JSON.stringify({hoy:new Date().toISOString().slice(0,10),temas:out})),count:n};
+}
+/* ---------- UI ---------- */
+const log=g('ia-log'),stat=g('ia-stat'),inp=g('ia-in');
+const add=(who,txt)=>{const d=E('div',txt,'ia-m ia-'+who);log.appendChild(d);log.scrollTop=log.scrollHeight;return d};
+function showSetup(){g('ia-setup').hidden=false;g('ia-code').value=cfg.code;g('ia-hide').value=cfg.hide;g('ia-consent').checked=!!cfg.consent}
+g('ia-open').addEventListener('click',()=>{const d=g('ia-dlg');d.showModal?d.showModal():d.setAttribute('open','');if(!cfg.code||!cfg.consent)showSetup();else g('ia-setup').hidden=true;if(!log.childNodes.length)add('s','Cuéntame lo que tengas en la cabeza o pídeme ayuda con un asunto. Yo propongo y tú aceptas.')});
+g('ia-close').addEventListener('click',()=>g('ia-dlg').close?g('ia-dlg').close():g('ia-dlg').removeAttribute('open'));
+g('ia-gear').addEventListener('click',()=>{const s=g('ia-setup');if(s.hidden)showSetup();else s.hidden=true});
+g('ia-save').addEventListener('click',()=>{cfg.code=g('ia-code').value.trim();cfg.hide=g('ia-hide').value;cfg.consent=g('ia-consent').checked;saveCfg();if(!cfg.code||!cfg.consent){stat.textContent='Falta el código de invitación y aceptar el aviso.';return}g('ia-setup').hidden=true;stat.textContent='Listo.';R=makeRedactor()});
+g('ia-new').addEventListener('click',()=>{hist=[];R=makeRedactor();log.replaceChildren();add('s','Conversación nueva.')});
+/* ---------- acciones ---------- */
+const S=(x,n)=>typeof x==='string'?x.trim().slice(0,n):'';
+function normalize(a){
+  if(!a||typeof a.tool!=='string'||!a.input||typeof a.input!=='object')return null;
+  const i=a.input,B=s=>R.back(s),id=aliasToId.get(S(i.id,10));
+  const steps=Array.isArray(i.pasos)?i.pasos.slice(0,12).map(s=>B(S(s,300))).filter(Boolean):[];
+  switch(a.tool){
+    case 'crear_asunto':{const t=B(S(i.titulo,160)),tema=B(S(i.tema,40));if(!t||!tema)return null;return {tool:a.tool,titulo:t,tema,resumen:B(S(i.resumen,500)),siguiente:B(S(i.siguiente,300)),pasos:steps,fecha:isDate(i.fecha)?i.fecha:''}}
+    case 'actualizar_asunto':{if(!id)return null;const p={};const t=B(S(i.titulo,160));if(t)p.title=t;const r=B(S(i.resumen,500));if(r)p.summary=r;const nx=B(S(i.siguiente,300));if(nx)p.next=nx;if(isDate(i.fecha))p.due=i.fecha;const w=B(S(i.esperando_a,120));if(w)p.wait=w;if(['high','medium','low'].includes(i.prioridad))p.priority=i.prioridad;if(!Object.keys(p).length)return null;return {tool:a.tool,id,p}}
+    case 'agregar_pasos':{if(!id||!steps.length)return null;return {tool:a.tool,id,pasos:steps}}
+    case 'cambiar_estado':{if(!id||!['hacer','esperando','hecho','guardado'].includes(i.estado))return null;return {tool:a.tool,id,estado:i.estado}}
+    case 'redactar_texto':{const t=B(S(i.titulo,120)),c=B(S(i.cuerpo,6000));if(!c)return null;return {tool:a.tool,titulo:t||'Texto',cuerpo:c}}
+  }
+  return null;
+}
+const title=id=>(CORE.item(id)||{}).title||id;
+function label(a){switch(a.tool){
+  case 'crear_asunto':return 'Crear asunto «'+a.titulo+'» en «'+a.tema+'»'+(a.pasos.length?' · '+a.pasos.length+(a.pasos.length===1?' paso':' pasos'):'')+(a.fecha?' · '+a.fecha:'');
+  case 'actualizar_asunto':return 'Cambiar «'+title(a.id)+'»: '+Object.keys(a.p).map(k=>({title:'título',summary:'resumen',next:'siguiente paso',due:'fecha',wait:'esperando a',priority:'prioridad'}[k]||k)).join(', ');
+  case 'agregar_pasos':return 'Añadir '+a.pasos.length+(a.pasos.length===1?' paso':' pasos')+' a «'+title(a.id)+'»';
+  case 'cambiar_estado':return 'Marcar «'+title(a.id)+'» como '+a.estado;
+}return ''}
+function apply(a){
+  if(a.tool==='crear_asunto'){
+    const snap=CORE.snapshot(),ex=snap.find(x=>String(x.name).toLowerCase()===a.tema.toLowerCase());
+    const gid=ex?ex.id:slug(a.tema),gname=ex?ex.name:a.tema;let id=slug(a.titulo);if(CORE.item(id))id+='-'+Date.now().toString(36).slice(-4);
+    const n=CORE.importSkill({groups:[{id:gid,name:gname,items:[{id,title:a.titulo,kind:'action',status:'accepted',priority:'medium',summary:a.resumen,next:a.siguiente,due:a.fecha,steps:a.pasos.map(t=>({t,done:false}))}]}]});
+    if(!n)throw Error('No se pudo crear');
+  }else if(a.tool==='actualizar_asunto')CORE.patch(a.id,a.p);
+  else if(a.tool==='agregar_pasos'){const cur=CORE.stored(a.id).steps||(CORE.item(a.id)||{}).steps||[];CORE.patch(a.id,{steps:[...cur,...a.pasos.map(t=>({t,note:'',done:false}))]})}
+  else if(a.tool==='cambiar_estado')CORE.patch(a.id,{state:a.estado});
+  window.dispatchEvent(new Event('hilo:changed'));
+}
+function card(a){
+  const c=E('div',null,'ia-card');
+  if(a.tool==='redactar_texto'){
+    c.append(E('b',a.titulo),E('pre',a.cuerpo));const b=E('button','Copiar');b.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(a.cuerpo);b.textContent='Copiado'}catch(e){b.textContent='Selecciónalo y copia (Ctrl+C)'}});c.append(b);return c;
+  }
+  c.append(E('span',label(a)));const ok=E('button','Aceptar'),no=E('button','Descartar','ia-g');
+  ok.addEventListener('click',()=>{try{apply(a);c.classList.add('ia-done');ok.remove();no.remove();c.append(E('em',' ✓ hecho'))}catch(e){stat.textContent='No se pudo aplicar: '+e.message}});
+  no.addEventListener('click',()=>c.remove());c.append(ok,no);c.dataset.apply='1';c._ok=ok;return c;
+}
+/* ---------- envío ---------- */
+async function send(){
+  if(busy)return;const raw=inp.value.trim();if(!raw)return;
+  if(URL_.indexOf('__HILO')===0){stat.textContent='El asistente todavía no está configurado.';return}
+  if(!cfg.code||!cfg.consent){showSetup();stat.textContent='Falta el código de invitación y aceptar el aviso.';return}
+  busy=true;g('ia-send').disabled=true;stat.textContent='Pensando…';add('u',raw);inp.value='';
+  hist.push({role:'user',content:R.out(raw)});
+  const ctx=buildContext(),ac=new AbortController(),to=setTimeout(()=>ac.abort(),90000);
+  try{
+    const r=await fetch(URL_+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},signal:ac.signal,body:JSON.stringify({code:cfg.code,mode:ctx.count===0?'arranque':'chat',context:ctx.text,messages:hist.slice(-20)})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw Error(d.error||('Error '+r.status));
+    const text=R.back(d.text||'');if(text)add('a',text);hist.push({role:'assistant',content:d.text||'(propuestas)'});
+    const acts=(Array.isArray(d.actions)?d.actions:[]).map(normalize).filter(Boolean),box=E('div',null,'ia-cards');
+    acts.forEach(a=>box.appendChild(card(a)));
+    const pend=[...box.children].filter(x=>x.dataset.apply);
+    if(pend.length>1){const all=E('button','Aceptar todos ('+pend.length+')');all.addEventListener('click',()=>{pend.forEach(x=>x._ok&&x._ok.parentNode&&x._ok.click());all.remove()});box.prepend(all)}
+    if(box.children.length){log.appendChild(box);log.scrollTop=log.scrollHeight}
+    stat.textContent=typeof d.left==='number'?'Cupo restante del mes: '+Math.round(d.left/1000)+' mil tokens.':'';
+  }catch(e){add('s',e.name==='AbortError'?'Tardó demasiado. Inténtalo de nuevo.':'No pude responder: '+e.message);stat.textContent=''}
+  finally{clearTimeout(to);busy=false;g('ia-send').disabled=false}
+}
+g('ia-send').addEventListener('click',send);
+inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+window.HiloIA={redact:t=>R.out(t),restore:t=>R.back(t),normalize,apply,context:buildContext};
+})();
+</script></body></html>
