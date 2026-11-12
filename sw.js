@@ -1,10 +1,25 @@
-// Hilo · avisos. El aviso llega vacío; el texto es genérico a propósito (no sale nada tuyo del navegador).
+// Hilo · avisos. El aviso llega vacío; el texto de cada recordatorio está guardado en este teléfono (IndexedDB), nunca en el servidor.
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-self.addEventListener('push', e => e.waitUntil(self.registration.showNotification('Hilo', {
-  body: 'Hay algo con fecha para hoy. Abrí Hilo y mirá qué toca.',
-  icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-dia'
-})));
+const idb = () => new Promise((ok, no) => { const r = indexedDB.open('hilo-rem', 1); r.onupgradeneeded = () => r.result.createObjectStore('r', { keyPath: 'id' }); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
+async function takeDue() {
+  try {
+    const db = await idb();
+    const all = await new Promise((ok, no) => { const q = db.transaction('r').objectStore('r').getAll(); q.onsuccess = () => ok(q.result || []); q.onerror = () => no(q.error); });
+    const now = Date.now(), due = all.filter(x => x.at <= now + 60000 && x.at > now - 3600000 * 2);
+    const old = all.filter(x => x.at <= now - 3600000 * 2);
+    if (due.length || old.length) await new Promise(ok => { const t = db.transaction('r', 'readwrite'); due.concat(old).forEach(x => t.objectStore('r').delete(x.id)); t.oncomplete = ok; t.onerror = ok; });
+    return due.sort((a, b) => a.at - b.at);
+  } catch (e) { return []; }
+}
+self.addEventListener('push', e => e.waitUntil((async () => {
+  const due = await takeDue();
+  if (due.length) {
+    await Promise.all(due.map(x => self.registration.showNotification('Hilo', { body: String(x.text || 'Tenés un aviso'), icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-r-' + x.id, requireInteraction: false })));
+    return;
+  }
+  await self.registration.showNotification('Hilo', { body: 'Hay algo con fecha para hoy. Abrí Hilo y mirá qué toca.', icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-dia' });
+})()));
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
