@@ -1,4 +1,4 @@
-// Hilo · avisos. El aviso llega vacío; el texto de cada recordatorio está guardado en este teléfono (IndexedDB), nunca en el servidor.
+// Hilo · avisos. (iOS ya escribe «from Hilo» en cada notificación: el título es el contenido, no el nombre de la app.) El aviso llega vacío; el texto de cada recordatorio está guardado en este teléfono (IndexedDB), nunca en el servidor.
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 const idb = () => new Promise((ok, no) => { const r = indexedDB.open('hilo-rem', 1); r.onupgradeneeded = () => r.result.createObjectStore('r', { keyPath: 'id' }); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
@@ -15,10 +15,10 @@ async function takeDue() {
 self.addEventListener('push', e => e.waitUntil((async () => {
   const due = await takeDue();
   if (due.length) {
-    await Promise.all(due.map(x => self.registration.showNotification('Hilo', { body: String(x.text || 'Tenés un aviso'), icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-r-' + x.id, requireInteraction: false })));
+    await Promise.all(due.map(x => self.registration.showNotification(String(x.text || 'Tenés un aviso'), { body: 'Recordatorio', icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-r-' + x.id, requireInteraction: false })));
     return;
   }
-  await self.registration.showNotification('Hilo', { body: 'Hay algo con fecha para hoy. Abrí Hilo y mirá qué toca.', icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-dia' });
+  await self.registration.showNotification('Hay algo con fecha para hoy', { body: 'Abrí la app y mirá qué toca.', icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-dia' });
 })()));
 self.addEventListener('notificationclick', e => {
   e.notification.close();
