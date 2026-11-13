@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; media-src 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#04070d">
+<title>Hilo · modo voz (prueba)</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#04070d;color:#d7e6f2;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+#hud{position:fixed;inset:0;pointer-events:none;padding:max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;justify-content:space-between}
+#hud>*{pointer-events:none}#hud button,#hud input,#hud li{pointer-events:auto}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+#tl b{letter-spacing:.32em;font-weight:500;font-size:13px;color:#7fd6ff}#tl span{display:block;font-size:12px;color:#6b8499;letter-spacing:.08em}
+#tr{display:flex;gap:8px;align-items:center}
+#chip{font-size:11px;letter-spacing:.22em;padding:6px 12px;border:1px solid #1b3346;border-radius:99px;color:#7fd6ff;background:rgba(8,18,28,.6)}
+#chip.l{color:#fff;border-color:#7fd6ff;box-shadow:0 0 14px rgba(127,214,255,.5)}#chip.t{color:#ffc46b;border-color:#6b4a14}#chip.s{color:#9dffcf;border-color:#1f6a4b;box-shadow:0 0 14px rgba(120,255,200,.35)}
+.ib{width:40px;height:40px;border-radius:50%;border:1px solid #1b3346;background:rgba(8,18,28,.6);color:#7fd6ff;font-size:16px;cursor:pointer;display:grid;place-items:center}
+#mid{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex:1;min-height:0;padding:10px 0}
+#side{width:min(260px,38vw);font-size:13px;color:#a9c0d2;align-self:flex-start;max-height:100%;overflow:hidden}
+#side h3,#detail h3{margin:0 0 8px;font-size:11px;font-weight:500;letter-spacing:.22em;color:#6b8499;text-transform:uppercase}
+#today{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+#today li{padding:8px 10px;border-left:2px solid #ffc46b;background:rgba(255,196,107,.06);border-radius:0 8px 8px 0;cursor:pointer;line-height:1.35}
+#today li.n{border-left-color:#3b5568;background:rgba(127,214,255,.04)}
+#detail{width:min(320px,42vw);font-size:13px;color:#b9cfdf;background:rgba(6,14,22,.72);border:1px solid #14283a;border-radius:14px;padding:14px;align-self:flex-start;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#detail[hidden]{display:none}#detail h2{margin:0 0 4px;font-size:16px;font-weight:500;color:#e8f4ff}#detail p{margin:0 0 8px;color:#8fa9bc}
+#detail ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}#detail li{padding-left:18px;position:relative}#detail li::before{content:"";position:absolute;left:2px;top:.6em;width:8px;height:8px;border-radius:50%;border:1px solid #4a7a96}#detail li.d{color:#5b7587;text-decoration:line-through}#detail li.d::before{background:#4a7a96}
+#cap{text-align:center;padding:0 6px 10px;min-height:92px;display:flex;flex-direction:column;gap:6px;justify-content:flex-end}
+#heard{font-size:13px;color:#6b8499;letter-spacing:.02em;min-height:18px}
+#said{font-size:clamp(17px,3.4vw,26px);font-weight:300;color:#eaf6ff;text-shadow:0 0 18px rgba(127,214,255,.35);line-height:1.35;max-width:900px;margin:0 auto}
+#bar{display:flex;gap:10px;align-items:center;justify-content:center}
+#txt{flex:1;max-width:420px;background:rgba(8,18,28,.6);border:1px solid #1b3346;border-radius:99px;color:#d7e6f2;padding:12px 16px;font:inherit;font-size:16px;outline:none}
+#txt:focus{border-color:#4aa6d6}
+#mic{width:68px;height:68px;border-radius:50%;border:1px solid #4aa6d6;background:radial-gradient(circle,rgba(127,214,255,.25),rgba(8,18,28,.8));color:#d9f3ff;cursor:pointer;display:grid;place-items:center;box-shadow:0 0 24px rgba(127,214,255,.25)}
+#mic.on{background:radial-gradient(circle,rgba(255,255,255,.5),rgba(127,214,255,.35));box-shadow:0 0 36px rgba(127,214,255,.8)}
+#mic svg{width:28px;height:28px}
+dialog{background:#08121c;color:#d7e6f2;border:1px solid #1b3346;border-radius:16px;padding:20px;width:min(420px,92vw)}dialog::backdrop{background:rgba(2,4,8,.7)}
+dialog label{display:block;margin:12px 0 4px;font-size:13px;color:#8fa9bc}dialog select,dialog input[type=range]{width:100%}dialog select{background:#0c1a28;color:#d7e6f2;border:1px solid #1b3346;border-radius:8px;padding:8px;font-size:15px}
+dialog .c{display:flex;gap:8px;align-items:center;margin-top:12px}dialog button{background:none;border:0;border-bottom:1px solid #7fd6ff;color:#d7e6f2;padding:8px 2px;font:inherit;cursor:pointer;margin-top:14px;margin-right:14px}
+#help{font-size:12px;color:#6b8499;line-height:1.6;margin-top:10px}
+@media(max-width:640px){#side{display:none}#detail{width:100%;max-height:34vh;overflow:auto}#mid{align-items:flex-start}}
+@media(max-height:480px){#cap{min-height:60px}#said{font-size:16px}#mic{width:52px;height:52px}}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="hud">
+ <div class="row"><div id="tl"><b>HILO</b><span id="clock"></span></div>
+  <div id="tr"><span id="chip">EN ESPERA</span><button class="ib" id="fs" aria-label="Pantalla completa" title="Pantalla completa">⛶</button><button class="ib" id="gear" aria-label="Ajustes de voz" title="Ajustes de voz">⚙</button></div></div>
+ <div id="mid"><div id="side"><h3>Hoy</h3><ul id="today"></ul></div><div id="detail" hidden></div></div>
+ <div id="cap"><div id="heard"></div><div id="said"></div></div>
+ <div id="bar"><input id="txt" placeholder="O escribí acá y Enter…" autocomplete="off" aria-label="Escribir una orden"><button id="mic" aria-label="Hablar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button></div>
+</div>
+<dialog id="cfg"><b style="letter-spacing:.2em;font-size:12px;color:#7fd6ff">AJUSTES DE VOZ</b>
+ <label for="vsel">Voz de Hilo</label><select id="vsel"></select>
+ <label for="rate">Velocidad</label><input type="range" id="rate" min="0.7" max="1.3" step="0.05" value="1">
+ <label for="pitch">Tono (más grave = más serio)</label><input type="range" id="pitch" min="0.6" max="1.4" step="0.05" value="0.9">
+ <div class="c"><input type="checkbox" id="conv"><label for="conv" style="margin:0">Modo conversación: vuelve a escuchar solo cuando termina de hablar</label></div>
+ <div class="c"><input type="checkbox" id="mute"><label for="mute" style="margin:0">Sin voz (solo texto)</label></div>
+ <div id="help">Decí, por ejemplo: «qué tengo hoy», «qué sigue», «vamos al proyecto incentivos», «anotá llamar al banco», «avisame en 1 minuto de probar esto», «listo», «volver al mapa», «silencio».</div>
+ <button id="test">Probar voz</button><button id="cx">Cerrar</button></dialog>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const cv=$('c'),ctx=cv.getContext('2d');
+const nz=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+/* ---------- datos de ejemplo (no son datos reales) ---------- */
+const N=[
+ {id:'work',name:'Trabajo',c:'#62d0ff',items:[
+  {id:'w1',t:'Seguir la candidatura enviada',s:'Mandaste el correo hace cinco días y no hay respuesta.',st:'wait',steps:['Esperar hasta el viernes','Si no hay respuesta, escribir un segundo seguimiento']},
+  {id:'w2',t:'Actualizar el CV con cifras',s:'Falta sumar resultados concretos del último puesto.',st:'todo',due:true,steps:['Elegir tres logros con números','Reescribir el resumen','Exportar en PDF']},
+  {id:'w3',t:'Preparar la entrevista del martes',s:'Videollamada a las 11:00.',st:'todo',steps:['Repasar la oferta','Preparar dos preguntas propias']}]},
+ {id:'papers',name:'Trámites',c:'#ffc46b',items:[
+  {id:'p1',t:'Cita para el certificado digital',s:'Te contestan el lunes cuando reabren.',st:'wait',steps:['Esperar al lunes','Insistir si no escriben']},
+  {id:'p2',t:'Renovar el documento antes del 30',s:'Hay que pedir turno online.',st:'todo',due:true,steps:['Pedir turno','Reunir fotos y justificante']}]},
+ {id:'home',name:'Casa',c:'#8ef0b7',items:[
+  {id:'h1',t:'Planificar la mudanza',s:'Comparar fechas y mirar qué se lleva.',st:'todo',steps:['Elegir fecha','Pedir presupuesto de transporte']}]},
+ {id:'money',name:'Dinero',c:'#ff8a8a',items:[
+  {id:'m1',t:'Revisar el margen de gastos del mes',s:'Ordenar fijos y variables.',st:'todo',steps:['Listar gastos fijos','Marcar lo que se puede recortar']}]},
+ {id:'body',name:'Cuerpo',c:'#c9a6ff',items:[
+  {id:'b1',t:'Analítica antes de la consulta',s:'La consulta es a fin de mes.',st:'wait',steps:['Confirmar fecha de extracción']}]},
+ {id:'people',name:'Gente',c:'#ff9de0',items:[
+  {id:'g1',t:'Cumpleaños de Aylen el 28',s:'Pensar un plan y un regalo.',st:'todo',steps:['Elegir plan','Reservar']}]},
+ {id:'dir',name:'Rumbo',c:'#7ff0e6',items:[
+  {id:'d1',t:'Comparar remoto, viajes y mixto',s:'Decidir hacia dónde orientar la búsqueda.',st:'todo',steps:['Anotar pros y contras de cada uno']}]},
+ {id:'proj',name:'Proyectos',c:'#b4c8ff',items:[
+  {id:'x1',t:'Incentivos y objetivos para comerciales',s:'Un asistente para que el comercial sepa cuánto va a cobrar este mes y qué subobjetivo lo bloquea.',st:'todo',steps:['Entrevistar a diez comerciales','Reunir cinco planes de incentivos reales','Probar una página de una sola pantalla']},
+  {id:'x2',t:'Hilo para otras personas',s:'Que arranque sin fricción para quien lo prueba.',st:'todo',steps:['Probar la sincronización entre dispositivos']}]}
+];
+let t=0;
+const R=290;N.forEach((n,i)=>{n.a=i/N.length*Math.PI*2-Math.PI/2;n.x=Math.cos(n.a)*R;n.y=Math.sin(n.a)*R;n.items.forEach((it,j)=>{it.n=n;it.oa=j/n.items.length*Math.PI*2+i;it.or=62+(j%2)*18;it.done=false})});
+const allItems=()=>N.flatMap(n=>n.items);
+const pos=o=>o.items?{x:o.x,y:o.y}:{x:o.n.x+Math.cos(o.oa+t*.12)*o.or,y:o.n.y+Math.sin(o.oa+t*.12)*o.or};
+/* ---------- estado ---------- */
+let W=0,H=0,DPR=1,state='idle',lvl=0,focus=null,cam={x:0,y:0,z:1},tgt={x:0,y:0,z:1},hl=new Set(),pulses=[],micKick=0;
+const stars=Array.from({length:170},()=>({x:Math.random()*2-1,y:Math.random()*2-1,z:Math.random()*.8+.2,p:Math.random()*6}));
+function resize(){DPR=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+addEventListener('resize',resize);resize();
+const stage=()=>{const top=H<480?46:72,bot=H<480?118:196,hh=Math.max(160,H-top-bot);return {cy:top+hh/2,hh}};
+const base=()=>Math.min(W*.96,stage().hh)/770;
+const S=(wx,wy)=>{const k=base()*cam.z;return [W/2+(wx-cam.x)*k,stage().cy+(wy-cam.y)*k,k]};
+function setChip(s){state=s;const c=$('chip');c.className=s==='listening'?'l':s==='thinking'?'t':s==='speaking'?'s':'';c.textContent={idle:'EN ESPERA',listening:'ESCUCHANDO',thinking:'PENSANDO',speaking:'HABLANDO'}[s];$('mic').classList.toggle('on',s==='listening')}
+/* ---------- dibujo ---------- */
+function draw(){
+ t+=1/60;ctx.clearRect(0,0,W,H);
+ cam.x+=(tgt.x-cam.x)*.07;cam.y+=(tgt.y-cam.y)*.07;cam.z+=(tgt.z-cam.z)*.07;
+ const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.7);g.addColorStop(0,'#0a1626');g.addColorStop(1,'#03060b');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ for(const s of stars){const x=((s.x*W*.6-cam.x*s.z*.15)%(W)+W*1.5)%W,y=((s.y*H*.6-cam.y*s.z*.15)%(H)+H*1.5)%H;ctx.globalAlpha=.25+.35*Math.abs(Math.sin(t*.6+s.p))*s.z;ctx.fillStyle='#bfe6ff';ctx.fillRect(x,y,s.z*1.6,s.z*1.6)}
+ ctx.globalAlpha=1;
+ const [cx,cy,k]=S(0,0);
+ ctx.lineWidth=1;for(const n of N){const [x,y]=S(n.x,n.y);ctx.strokeStyle=n.c+(focus&&(focus===n||focus.n===n)?'66':'22');ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x,y);ctx.stroke()}
+ for(const n of N){const [x,y]=S(n.x,n.y),act=focus&&(focus===n||focus.n===n),dim=focus&&!act;
+  const gr=ctx.createRadialGradient(x,y,0,x,y,70*k);gr.addColorStop(0,n.c+(dim?'18':'44'));gr.addColorStop(1,n.c+'00');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(x,y,70*k,0,7);ctx.fill();
+  ctx.strokeStyle=n.c+(dim?'33':'aa');ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(x,y,(15+(focus===n?3*Math.sin(t*4):0))*k,0,7);ctx.stroke();
+  ctx.fillStyle=n.c+(dim?'55':'ff');ctx.beginPath();ctx.arc(x,y,4.5*k,0,7);ctx.fill();
+  ctx.font=Math.max(10,12*k)+'px system-ui,sans-serif';ctx.textAlign='center';ctx.fillStyle=dim?'rgba(150,175,195,.35)':'rgba(205,230,248,.92)';ctx.fillText(n.name.toUpperCase().split('').join(' '),x,y-24*k);
+  for(const it of n.items){const p=pos(it),[ix,iy]=S(p.x,p.y),h=hl.has(it)||focus===it;
+   ctx.strokeStyle=n.c+(dim?'18':'30');ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ix,iy);ctx.stroke();
+   const col=it.done?'#4c6577':(it.due||h)?'#ffc46b':n.c;const r=(it.done?2.4:3.4)*k*(h?1.5+.3*Math.sin(t*6):1);
+   if(h){ctx.fillStyle='#ffc46b33';ctx.beginPath();ctx.arc(ix,iy,r*3,0,7);ctx.fill()}
+   ctx.fillStyle=col+(dim?'66':'ff');ctx.beginPath();ctx.arc(ix,iy,r,0,7);ctx.fill();
+   if(cam.z>1.5||h||focus===it){ctx.font=Math.max(9,10.5*k)+'px system-ui,sans-serif';ctx.fillStyle=dim?'rgba(160,185,205,.4)':'rgba(215,235,250,.95)';ctx.fillText(it.t.length>34?it.t.slice(0,33)+'…':it.t,ix,iy+(15*k+6))}}}
+ pulses=pulses.filter(p=>p.l>0);for(const p of pulses){p.l-=.016;const [x,y]=S(p.x,p.y);ctx.strokeStyle='rgba(255,196,107,'+p.l+')';ctx.beginPath();ctx.arc(x,y,(1-p.l)*60*k,0,7);ctx.stroke()}
+ const tl=state==='speaking'?.35+.65*Math.abs(Math.sin(t*9+Math.sin(t*3)*2)):state==='listening'?.3+.2*Math.sin(t*5)+micKick:state==='thinking'?.25:.08+.04*Math.sin(t*1.5);lvl+=(tl-lvl)*.18;micKick*=.9;
+ const r0=34*k+lvl*14*k,col=state==='thinking'?'255,196,107':state==='speaking'?'150,255,205':'127,214,255';
+ const og=ctx.createRadialGradient(cx,cy,0,cx,cy,r0*3.2);og.addColorStop(0,'rgba('+col+',.55)');og.addColorStop(.35,'rgba('+col+',.16)');og.addColorStop(1,'rgba('+col+',0)');ctx.fillStyle=og;ctx.beginPath();ctx.arc(cx,cy,r0*3.2,0,7);ctx.fill();
+ ctx.lineWidth=1.4;for(let i=0;i<3;i++){const rr=r0*(1+i*.34)+Math.sin(t*2+i)*2*k;ctx.strokeStyle='rgba('+col+','+(.6-i*.17)+')';ctx.beginPath();
+  if(state==='thinking'){ctx.arc(cx,cy,rr,t*(2+i)+i,t*(2+i)+i+2.2)}else if(state==='speaking'||state==='listening'){for(let a=0;a<=64;a++){const an=a/64*Math.PI*2,w=1+lvl*.16*Math.sin(an*(6+i*3)+t*(7+i*2));const px=cx+Math.cos(an)*rr*w,py=cy+Math.sin(an)*rr*w;a?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.closePath()}else ctx.arc(cx,cy,rr,0,7);ctx.stroke()}
+ ctx.fillStyle='rgba('+col+',.95)';ctx.beginPath();ctx.arc(cx,cy,5*k+lvl*4*k,0,7);ctx.fill();
+ requestAnimationFrame(draw)}
+/* ---------- panel ---------- */
+function renderToday(){const ul=$('today');ul.replaceChildren();const L=allItems().filter(i=>i.due&&!i.done),rest=allItems().filter(i=>!i.due&&!i.done&&i.st==='todo').slice(0,3);
+ [...L.map(i=>[i,0]),...rest.map(i=>[i,1])].forEach(([i,q])=>{const li=document.createElement('li');li.className=q?'n':'';li.textContent=i.t;li.onclick=()=>focusOn(i);ul.append(li)})}
+function renderDetail(){const d=$('detail');if(!focus){d.hidden=true;return}d.hidden=false;d.replaceChildren();
+ const h=document.createElement('h2'),p=document.createElement('p'),ul=document.createElement('ul');
+ if(focus.items){h.textContent=focus.name;p.textContent=focus.items.length+' asuntos';focus.items.forEach(i=>{const li=document.createElement('li');li.textContent=i.t;if(i.done)li.className='d';ul.append(li)})}
+ else{h.textContent=focus.t;p.textContent=focus.s;focus.steps.forEach((s,i)=>{const li=document.createElement('li');li.textContent=s;if(focus.done&&i===0)li.className='d';ul.append(li)})}
+ const k=document.createElement('h3');k.textContent=focus.items?'Dentro':'Pasos';d.append(k,h,p,ul)}
+function focusOn(o){focus=o;hl.clear();const p=pos(o);tgt={x:p.x,y:p.y,z:o.items?2.1:3.1};renderDetail()}
+function overview(){focus=null;hl.clear();tgt={x:0,y:0,z:1};renderDetail()}
+/* ---------- cerebro de la prueba (sin IA: reglas) ---------- */
+const STOP=new Set('de del la el los las un una y o a al en para por con sobre que es mi mis tu'.split(' '));
+const toks=s=>nz(s).split(/[^a-z0-9ñ]+/).filter(w=>w.length>=3&&!STOP.has(w));
+function find(q){const w=toks(q);if(!w.length)return null;const sc=txt=>{const T=toks(txt).map(x=>x.slice(0,5));return w.filter(x=>T.includes(x.slice(0,5))).length/w.length};
+ const c=[...N.map(n=>({o:n,s:sc(n.name)*1.05})),...allItems().map(i=>({o:i,s:sc(i.t)}))].sort((a,b)=>b.s-a.s);return c[0]&&c[0].s>=.5&&(!c[1]||c[1].s<c[0].s)?c[0].o:null}
+const lista=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' y '+a[a.length-1];
+function think(raw){
+ let x=nz(raw).replace(/^\s*(hilo|oye hilo|hey hilo)[,.\s]+/,'').trim();if(!x)return {say:'Te escucho.'};
+ let m;
+ if(/(silencio|callate|basta|para de hablar)/.test(x)){stopSpeak();return {say:'',quiet:true}}
+ if(/(que puedo decir|ayuda|comandos|que sabes|que haces)/.test(x))return {say:'Podés pedirme: qué tengo hoy, qué sigue, ir a un proyecto, anotar algo, que te avise en unos minutos, o cerrar lo que estás viendo.'};
+ if(/^(hola|buenas|buen dia|buenos dias|buenas tardes|buenas noches)/.test(x))return {say:'Hola. Soy Hilo. Decime qué querés ver.'};
+ if(/(quien sos|quien eres|como te llamas)/.test(x))return {say:'Soy Hilo, tu mapa de asuntos. En esta prueba contesto con reglas simples; la inteligencia completa se conecta después.'};
+ if(/(que tengo|que hay|que toca|pendientes|agenda|para hoy)/.test(x)&&/(hoy|pendientes|agenda|que tengo|que toca)/.test(x)){const L=allItems().filter(i=>i.due&&!i.done);overview();hl=new Set(L);
+  if(!L.length)return {say:'Hoy no tenés nada con fecha. Podés mirar lo siguiente si querés avanzar algo.'};
+  return {say:'Para hoy tenés '+(L.length===1?'una cosa':L.length+' cosas')+': '+lista(L.map(i=>i.t))+'. Empezaría por '+L[0].t+'.'}}
+ if(/(que sigue|lo siguiente|por donde (empiezo|sigo)|que hago ahora)/.test(x)){const i=allItems().find(i=>i.due&&!i.done)||allItems().find(i=>i.st==='todo'&&!i.done);if(!i)return {say:'No queda nada pendiente. Buen trabajo.'};focusOn(i);return {say:'Lo siguiente es '+i.t+'. El primer paso: '+i.steps[0]+'.'}}
+ if(m=/^(vamos|pasemos|abri|abre|abrime|anda|ir|ve|mostra|mostrame|llevame)\b.*?\b(proyecto|asunto|nucleo|tema|a|al|de|sobre)\s+(.+)$/.exec(x)){const o=find(m[3]);
+  if(!o)return {say:'No encuentro ese proyecto. Tenés '+lista(N.map(n=>n.name))+'.'};focusOn(o);
+  return {say:o.items?o.name+': '+o.items.length+(o.items.length===1?' asunto. ':' asuntos. ')+lista(o.items.map(i=>i.t))+'.':o.t+'. '+o.s+' Primer paso: '+o.steps[0]+'.'}}
+ if(m=/^(anota|agrega|apunta|guarda|suma|anade)\w*\s+(.+)$/.exec(x)){const txt=raw.replace(/^\s*(hilo[,.\s]+)?\S+\s+/i,'').trim();if(!txt)return {say:'¿Qué anoto?'};
+  if(focus&&!focus.items){focus.steps.push(txt);renderDetail();pulses.push({...pos(focus),l:1});return {say:'Anotado como paso en '+focus.t+'.'}}
+  const n=focus&&focus.items?focus:N[7];const it={id:'n'+Date.now(),t:txt,s:'Anotado por voz.',st:'todo',steps:['Definir el primer paso'],n,oa:Math.random()*6,or:60+Math.random()*30,done:false};n.items.push(it);renderToday();focusOn(it);pulses.push({...pos(it),l:1});return {say:'Anotado en '+n.name+': '+txt+'.'}}
+ if(m=/(avisa|avisame|recorda|recordame|recuerda|recuerdame)\w*.*?(?:en\s+)?(un|una|\d+)\s*(segundo|segundos|minuto|minutos|min)\b\s*(?:de|que|para)?\s*(.*)$/.exec(x)){const n=m[2]==='un'||m[2]==='una'?1:+m[2],u=/seg/.test(m[3])?1:60,secs=Math.min(n*u,600),what=(m[4]||'').trim()||'lo que pediste';
+  setTimeout(()=>{flash();respond('Aviso: '+what+'.')},secs*1000);return {say:'Listo. Te aviso en '+(secs>=60?Math.round(secs/60)+(Math.round(secs/60)===1?' minuto':' minutos'):secs+' segundos')+'.'}}
+ if(/^(listo|hecho|termine|ya esta|ya lo hice|resuelto|cerralo|cerrar)/.test(x)){if(!focus||focus.items)return {say:'Decime primero cuál: abrí un asunto y después decí listo.'};focus.done=true;renderDetail();renderToday();const t0=focus.t;overview();return {say:'Cerrado: '+t0+'. Sale de lo pendiente.'}}
+ if(/(volver|mapa|inicio|general|todo el mapa|salir|atras)/.test(x)){overview();return {say:'Mapa completo.'}}
+ const o=find(x);if(o){focusOn(o);return {say:o.items?o.name+'.':o.t+'. '+o.s}}
+ return {say:'Todavía no entiendo eso en esta prueba. Probá con: qué tengo hoy, qué sigue, vamos al proyecto incentivos, o anotá algo.'}}
+function flash(){try{document.body.animate([{boxShadow:'inset 0 0 0 0 rgba(255,196,107,0)'},{boxShadow:'inset 0 0 120px 10px rgba(255,196,107,.45)'},{boxShadow:'inset 0 0 0 0 rgba(255,196,107,0)'}],{duration:1400})}catch(e){}}
+/* ---------- voz: hablar ---------- */
+let cfg={voice:'',rate:1,pitch:.9,conv:false,mute:false};try{Object.assign(cfg,JSON.parse(localStorage.getItem('hilo-voz-prueba')||'{}'))}catch(e){}
+const saveCfg=()=>{try{localStorage.setItem('hilo-voz-prueba',JSON.stringify(cfg))}catch(e){}};
+const synth=window.speechSynthesis;let voices=[],typer=0;
+function loadVoices(){if(!synth)return;voices=synth.getVoices().filter(v=>/^es/i.test(v.lang));const s=$('vsel');s.replaceChildren();if(!voices.length){const o=document.createElement('option');o.textContent='(este navegador no trae voces en español)';s.append(o);return}
+ voices.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI;o.textContent=v.name+' · '+v.lang;s.append(o)});if(!cfg.voice||!voices.some(v=>v.voiceURI===cfg.voice)){const pref=voices.find(v=>/(jorge|diego|juan|carlos|male|google espa)/i.test(v.name))||voices.find(v=>/es-(ES|MX|AR)/i.test(v.lang))||voices[0];cfg.voice=pref.voiceURI}s.value=cfg.voice}
+if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
+function typeSaid(txt){clearInterval(typer);const el=$('said');el.textContent='';let i=0;typer=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length)clearInterval(typer)},22)}
+function stopSpeak(){try{synth&&synth.cancel()}catch(e){}clearInterval(typer);if(state==='speaking')setChip('idle')}
+function speak(txt){return new Promise(res=>{typeSaid(txt);if(!txt){res();return}
+ if(cfg.mute||!synth||!window.SpeechSynthesisUtterance){setChip('speaking');setTimeout(()=>{setChip('idle');res()},Math.min(6000,txt.length*45));return}
+ try{synth.cancel()}catch(e){}const u=new SpeechSynthesisUtterance(txt);u.lang='es-ES';const v=voices.find(v=>v.voiceURI===cfg.voice);if(v){u.voice=v;u.lang=v.lang}u.rate=cfg.rate;u.pitch=cfg.pitch;
+ let done=false;const end=()=>{if(done)return;done=true;setChip('idle');res()};u.onstart=()=>setChip('speaking');u.onend=end;u.onerror=end;
+ synth.speak(u);setTimeout(()=>{if(!done&&!synth.speaking&&!synth.pending)end()},1500)})}
+/* ---------- voz: escuchar ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false;
+async function respond(txt){setChip('thinking');await new Promise(r=>setTimeout(r,350));await speak(txt);if(cfg.conv&&!cfg.mute&&SR)startListen()}
+function handle(raw){$('heard').textContent='“'+raw+'”';const r=think(raw);if(r.quiet){setChip('idle');$('said').textContent='';return}respond(r.say)}
+function startListen(){if(!SR){$('said').textContent='Este navegador no permite dictado por voz. Probá en Safari o Chrome, o escribí abajo.';return}
+ if(listening){try{rec.stop()}catch(e){}return}stopSpeak();
+ rec=new SR();rec.lang='es-ES';rec.interimResults=true;rec.continuous=false;let final='';
+ rec.onstart=()=>{listening=true;setChip('listening');$('heard').textContent='Te escucho…'};
+ rec.onresult=e=>{let s='';for(let i=e.resultIndex;i<e.results.length;i++){s+=e.results[i][0].transcript;if(e.results[i].isFinal)final=s}$('heard').textContent='“'+s+'”';micKick=.5};
+ rec.onerror=e=>{listening=false;setChip('idle');$('said').textContent=e.error==='not-allowed'||e.error==='service-not-allowed'?'No hay permiso para el micrófono. Activalo en los permisos del sitio.':e.error==='no-speech'?'No te escuché. Tocá el micrófono y probá de nuevo.':'No pude escuchar ('+e.error+').'};
+ rec.onend=()=>{listening=false;if(final)handle(final);else if(state==='listening')setChip('idle')};
+ try{rec.start()}catch(e){listening=false;setChip('idle')}}
+$('mic').onclick=startListen;
+$('txt').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=e.target.value.trim();if(!v)return;e.target.value='';stopSpeak();handle(v)}});
+/* ---------- ajustes ---------- */
+$('gear').onclick=()=>{$('rate').value=cfg.rate;$('pitch').value=cfg.pitch;$('conv').checked=cfg.conv;$('mute').checked=cfg.mute;$('cfg').showModal?$('cfg').showModal():$('cfg').setAttribute('open','')};
+$('cx').onclick=()=>$('cfg').close?$('cfg').close():$('cfg').removeAttribute('open');
+$('vsel').onchange=e=>{cfg.voice=e.target.value;saveCfg()};$('rate').oninput=e=>{cfg.rate=+e.target.value;saveCfg()};$('pitch').oninput=e=>{cfg.pitch=+e.target.value;saveCfg()};
+$('conv').onchange=e=>{cfg.conv=e.target.checked;saveCfg()};$('mute').onchange=e=>{cfg.mute=e.target.checked;saveCfg()};
+$('test').onclick=()=>speak('Hola. Soy Hilo. Así suena mi voz.');
+$('fs').onclick=()=>{const d=document.documentElement;try{document.fullscreenElement?document.exitFullscreen():(d.requestFullscreen||d.webkitRequestFullscreen).call(d)}catch(e){}};
+cv.addEventListener('pointerdown',e=>{let best=null,bd=28;const ps=[];N.forEach(n=>{ps.push([n,n.x,n.y]);n.items.forEach(i=>{const p=pos(i);ps.push([i,p.x,p.y])})});for(const [o,wx,wy] of ps){const [x,y]=S(wx,wy),d=Math.hypot(x-e.clientX,y-e.clientY);if(d<bd){bd=d;best=o}}if(best)focusOn(best);else if(focus)overview()});
+function clock(){const d=new Date();$('clock').textContent=d.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'}).toUpperCase()+' · '+d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}
+clock();setInterval(clock,20000);
+renderToday();setChip('idle');
+$('said').textContent='Tocá el micrófono y decí «qué tengo hoy». Es una prueba con datos de ejemplo.';
+window.__hilo={think,handle,focusOn,overview,get focus(){return focus},N};
+draw();
+})();
+</script></body></html>
