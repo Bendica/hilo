@@ -58,7 +58,7 @@ def clean(it):
 
 def call(path, token, body=None):
     req = urllib.request.Request(URL + path, method='POST' if body is not None else 'GET',
-                                 headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'},
+                                 headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'User-Agent': 'hilo-buzon/1.0'},
                                  data=json.dumps(body).encode() if body is not None else None)
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.loads(r.read().decode())
