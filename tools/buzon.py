@@ -7,7 +7,12 @@ y el Worker solo guarda texto opaco. El token solo sirve para escribir en ese bu
 
 Uso:
   HILO_BUZON_TOKEN=... python3 buzon.py elementos.json
-  elementos.json = [{"type":"oportunidad"|"correo"|"noticia","title":"...","summary":"...","url":"https://...","next":"...","due":"AAAA-MM-DD","tema":"..."}]
+  elementos.json = [{"type":"oportunidad"|"correo"|"noticia"|"agenda","title":"...","summary":"...","url":"https://...","next":"...","due":"AAAA-MM-DD","tema":"..."}]
+  (agenda: "title" = "10:00 · Qué" y "due" = el día; solo se muestra en el parte, no crea asuntos)
+  Cada elemento lleva una referencia «ref» (se calcula sola) que se imprime al enviar: anótala para cruzarla con las respuestas.
+  HILO_BUZON_TOKEN=... python3 buzon.py --respuestas
+  imprime en JSON lo que la persona decidió en Hilo (aceptado / hecho / descartado y motivo) en los últimos 45 días.
+  Los motivos de descarte son: lejos, sueldo, requisitos, puesto (no le interesa el puesto), ya (ya postuló / ya lo tenía), otro.
 Requiere: pip install cryptography
 """
 import base64, json, os, sys, urllib.request
@@ -17,7 +22,8 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 URL = os.environ.get('HILO_BUZON_URL', 'https://hilo-ia.benjamin-diazcatania.workers.dev')
 AAD = b'hilo-buzon-v1'
-TYPES = {'oportunidad', 'correo', 'noticia'}
+TYPES = {'oportunidad', 'correo', 'noticia', 'agenda'}
+import hashlib
 LIMITS = {'title': 140, 'summary': 480, 'next': 240, 'tema': 40}
 
 
@@ -53,6 +59,7 @@ def clean(it):
     due = str(it.get('due', ''))
     if len(due) == 10 and due[4] == '-' and due[7] == '-':
         out['due'] = due
+    out['ref'] = hashlib.sha256((out['type'] + '|' + (out.get('url') or out['title'])).encode('utf-8')).hexdigest()[:12]
     return out
 
 
@@ -68,6 +75,8 @@ def main():
     token = os.environ.get('HILO_BUZON_TOKEN', '')
     if len(token) < 24:
         sys.exit('Falta HILO_BUZON_TOKEN')
+    if sys.argv[1:2] == ['--respuestas']:
+        print(json.dumps(call('/inbox/fb', token).get('items', []), ensure_ascii=False, indent=1)); return
     items = [x for x in (clean(i) for i in json.load(open(sys.argv[1], encoding='utf-8'))) if x][:20]
     if not items:
         print('Nada para enviar'); return
@@ -75,10 +84,13 @@ def main():
     if not keys:
         sys.exit('Ningún dispositivo registró su clave todavía (abrir Hilo con el asistente configurado).')
     sobres = [{'device': k['device'], 'blob': seal(pubkey(k['pub']), it)} for k in keys for it in items]
-    total = 0
-    for i in range(0, len(sobres), 50):
-        total += call('/inbox/put', token, {'items': sobres[i:i + 50]}).get('stored', 0)
+    total, last = 0, len(range(0, len(sobres), 50)) - 1
+    avisar = any(it['type'] in ('oportunidad', 'correo') for it in items)  # noticias y agenda no hacen sonar el móvil
+    for n, i in enumerate(range(0, len(sobres), 50)):
+        total += call('/inbox/put', token, {'items': sobres[i:i + 50], 'notify': avisar and n == last}).get('stored', 0)
     print(f'Enviados {len(items)} elementos a {len(keys)} dispositivo(s): {total} sobres guardados.')
+    for it in items:
+        print(f"ref {it['ref']} · {it['type']} · {it['title']}")
 
 
 if __name__ == '__main__':
