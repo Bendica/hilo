@@ -20,7 +20,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-URL = os.environ.get('HILO_BUZON_URL', 'https://hilo-ia.hilo-ia.workers.dev')
+URL = os.environ.get('HILO_BUZON_URL', 'https://hilo-ia.bendica.workers.dev')
 AAD = b'hilo-buzon-v1'
 TYPES = {'oportunidad', 'correo', 'noticia', 'agenda'}
 import hashlib
