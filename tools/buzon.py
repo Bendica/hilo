@@ -9,6 +9,8 @@ Uso:
   HILO_BUZON_TOKEN=... python3 buzon.py elementos.json
   elementos.json = [{"type":"oportunidad"|"correo"|"noticia"|"agenda","title":"...","summary":"...","url":"https://...","next":"...","due":"AAAA-MM-DD","tema":"..."}]
   (agenda: "title" = "10:00 · Qué" y "due" = el día; solo se muestra en el parte, no crea asuntos)
+  (opcional en oportunidad, correo y asunto: "borrador": {"canal":"email|linkedin|whatsapp|sms|web|carta","destino":"correo, teléfono o https","asunto":"...","cuerpo":"texto listo»}:
+   queda guardado en el asunto y Hilo muestra el botón para abrir ese canal con el texto; enviar lo hace la persona)
   (asunto: lo que otra conversación de Claude quiere guardar en Hilo; "tema" = nombre del núcleo, "steps" = hasta 8 pasos;
    llega como propuesta a la bandeja y Benjamin decide)
   Cada elemento lleva una referencia «ref» (se calcula sola) que se imprime al enviar: anótala para cruzarla con las respuestas.
@@ -63,6 +65,12 @@ def clean(it):
         out['due'] = due
     if it['type'] == 'asunto' and isinstance(it.get('steps'), list):
         out['steps'] = [str(x).strip()[:160] for x in it['steps'][:8] if str(x).strip()]
+    b = it.get('borrador')
+    if isinstance(b, dict) and str(b.get('cuerpo', '')).strip():
+        canal = str(b.get('canal', '')).strip()
+        out['borrador'] = {'canal': canal if canal in ('email', 'linkedin', 'whatsapp', 'sms', 'web', 'carta', 'otro') else '',
+                           'destino': str(b.get('destino', '')).strip()[:400], 'asunto': str(b.get('asunto', '')).strip()[:140],
+                           'cuerpo': str(b['cuerpo']).strip()[:3000]}
     out['ref'] = hashlib.sha256((out['type'] + '|' + (out.get('url') or out['title'])).encode('utf-8')).hexdigest()[:12]
     return out
 
