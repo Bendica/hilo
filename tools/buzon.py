@@ -9,6 +9,8 @@ Uso:
   HILO_BUZON_TOKEN=... python3 buzon.py elementos.json
   elementos.json = [{"type":"oportunidad"|"correo"|"noticia"|"agenda","title":"...","summary":"...","url":"https://...","next":"...","due":"AAAA-MM-DD","tema":"..."}]
   (agenda: "title" = "10:00 · Qué" y "due" = el día; solo se muestra en el parte, no crea asuntos)
+  (asunto: lo que otra conversación de Claude quiere guardar en Hilo; "tema" = nombre del núcleo, "steps" = hasta 8 pasos;
+   llega como propuesta a la bandeja y Benjamin decide)
   Cada elemento lleva una referencia «ref» (se calcula sola) que se imprime al enviar: anótala para cruzarla con las respuestas.
   HILO_BUZON_TOKEN=... python3 buzon.py --respuestas
   imprime en JSON lo que la persona decidió en Hilo (aceptado / hecho / descartado y motivo) en los últimos 45 días.
@@ -22,7 +24,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 URL = os.environ.get('HILO_BUZON_URL', 'https://hilo-ia.bendica.workers.dev')
 AAD = b'hilo-buzon-v1'
-TYPES = {'oportunidad', 'correo', 'noticia', 'agenda'}
+TYPES = {'oportunidad', 'correo', 'noticia', 'agenda', 'asunto'}
 import hashlib
 LIMITS = {'title': 140, 'summary': 480, 'next': 240, 'tema': 40}
 
@@ -59,6 +61,8 @@ def clean(it):
     due = str(it.get('due', ''))
     if len(due) == 10 and due[4] == '-' and due[7] == '-':
         out['due'] = due
+    if it['type'] == 'asunto' and isinstance(it.get('steps'), list):
+        out['steps'] = [str(x).strip()[:160] for x in it['steps'][:8] if str(x).strip()]
     out['ref'] = hashlib.sha256((out['type'] + '|' + (out.get('url') or out['title'])).encode('utf-8')).hexdigest()[:12]
     return out
 
