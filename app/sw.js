@@ -32,8 +32,9 @@ const ub = t => Uint8Array.from(atob(t), c => c.charCodeAt(0));
 async function inboxNote() {
   try {
     const cfg = await kgo('cfg'), kp = await kgo('inbox');
-    if (!cfg || !cfg.url || !cfg.code || !kp || !kp.privateKey) return null;
-    const r = await fetch(cfg.url + '/inbox/take', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: cfg.code, device: cfg.device }) });
+    const auth = cfg && (cfg.auth || (cfg.code ? { code: cfg.code, device: cfg.device } : null));
+    if (!cfg || !cfg.url || !auth || !kp || !kp.privateKey) return null;
+    const r = await fetch(cfg.url + '/inbox/take', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(auth) });
     const d = await r.json(); const items = Array.isArray(d.items) ? d.items : [];
     const told = (await kgo('told')) || [], nw = [];
     for (const x of items) {
