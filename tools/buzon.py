@@ -10,6 +10,7 @@ Uso:
   elementos.json = [{"type":"oportunidad"|"correo"|"noticia"|"agenda","title":"...","summary":"...","url":"https://...","next":"...","due":"AAAA-MM-DD","tema":"..."}]
   (agenda: "title" = "10:00 · Qué" y "due" = el día; solo se muestra en el parte, no crea asuntos)
   (persona: "title" = nombre, "cumple" = "DD/MM", "cada" = días entre contactos, "grupo" = familia|amigos, "telefono" opcional; va a «Gente»)
+  (estilo: "title" = regla fija de cómo escribe o quiere que le hablen; se suma a «Cómo me hablás»)
   (opcional en oportunidad, correo y asunto: "borrador": {"canal":"email|linkedin|whatsapp|sms|web|carta","destino":"correo, teléfono o https","asunto":"...","cuerpo":"texto listo»}:
    queda guardado en el asunto y Hilo muestra el botón para abrir ese canal con el texto; enviar lo hace la persona)
   (asunto: lo que otra conversación de Claude quiere guardar en Hilo; "tema" = nombre del núcleo, "steps" = hasta 8 pasos;
@@ -27,7 +28,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 URL = os.environ.get('HILO_BUZON_URL', 'https://hilo-ia.bendica.workers.dev')
 AAD = b'hilo-buzon-v1'
-TYPES = {'oportunidad', 'correo', 'noticia', 'agenda', 'asunto', 'persona'}
+TYPES = {'oportunidad', 'correo', 'noticia', 'agenda', 'asunto', 'persona', 'estilo'}
 import hashlib
 LIMITS = {'title': 140, 'summary': 480, 'next': 240, 'tema': 40}
 
@@ -73,7 +74,7 @@ def clean(it):
                            'destino': str(b.get('destino', '')).strip()[:400], 'asunto': str(b.get('asunto', '')).strip()[:140],
                            'cuerpo': str(b['cuerpo']).strip()[:3000]}
     if it['type'] == 'persona':
-        for k in ('cumple', 'grupo', 'telefono'):
+        for k in ('cumple', 'grupo', 'telefono', 'apodo'):
             if it.get(k):
                 out[k] = str(it[k]).strip()[:20]
         if str(it.get('cada', '')).isdigit():
