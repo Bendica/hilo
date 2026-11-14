@@ -1,6 +1,7 @@
 # Hilo
 
-Mapa vivo de tus asuntos: te dice qué hacer ahora. App de una sola página, sin servidor y sin cuenta.
-Tus datos se guardan solo en tu navegador; no se envía nada.
+Mapa vivo de tus asuntos: te dice qué hacer ahora.
 
-Esta versión viene vacía. Para cargar tus asuntos, usa la skill «Arrancar Hilo» y el botón ⋯ → «Cargar archivo de arranque o copia».
+- La app vive en **https://hilo.bendica.workers.dev** (Cloudflare, solo se publica la carpeta `app/`, ver `wrangler.jsonc`).
+- `bendica.github.io/hilo` quedó como página de mudanza: enlaza a la dirección nueva y permite borrar lo que quedó guardado en la vieja.
+- `tools/buzon.py`: lo usan las tareas programadas para dejar sobres cifrados en el buzón de Hilo.
