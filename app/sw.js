@@ -52,7 +52,7 @@ async function inboxNote() {
     const t = x => String(x.title).replace(/\s+/g, ' ').slice(0, 90);
     const op = nw.filter(x => x.type === 'oportunidad').length, co = nw.length - op;
     const what = [op ? op + (op === 1 ? ' oportunidad' : ' oportunidades') : '', co ? co + (co === 1 ? ' correo' : ' correos') : ''].filter(Boolean).join(' y ');
-    return nw.length === 1 ? { title: t(nw[0]), body: nw[0].type === 'correo' ? 'Correo · para revisar en Hilo' : 'Oportunidad · para revisar en Hilo' } : { title: 'Nuevo en Hilo: ' + what, body: nw.slice(0, 3).map(t).join(' · ') };
+    return nw.length === 1 ? { title: t(nw[0]), body: String(nw[0].summary || '').replace(/\s+/g, ' ').trim().slice(0, 140) || (nw[0].type === 'correo' ? 'Correo · para revisar en Hilo' : 'Oportunidad · para revisar en Hilo'), open: '__tray' } : { title: 'Nuevo en Hilo: ' + what, body: nw.slice(0, 3).map(t).join(' · '), open: '__tray' };
   } catch (e) { return null; }
 }
 self.addEventListener('push', e => e.waitUntil((async () => {
@@ -62,7 +62,7 @@ self.addEventListener('push', e => e.waitUntil((async () => {
     return;
   }
   const b = await inboxNote();
-  if (b) { await self.registration.showNotification(b.title, { body: b.body, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-buzon', data: {} }); return; }
+  if (b) { await self.registration.showNotification(b.title, { body: b.body, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-buzon', data: b.open ? { open: b.open } : {} }); return; }
   const n = await dayNote();
   await self.registration.showNotification(n ? n.title : 'Hay algo con fecha para hoy', { body: n ? n.body : 'Abrí la app y mirá qué toca.', icon: 'icon-192.png', badge: 'icon-192.png', tag: 'hilo-dia', data: n ? { open: n.open } : {} });
 })()));
