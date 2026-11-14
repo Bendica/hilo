@@ -1,0 +1,9 @@
+// Sitio propio de Hilo (Cloudflare Workers, solo archivos estáticos). Publica únicamente la carpeta app/:
+// jarvis.html, tools/ y el resto del repositorio NO se sirven aquí.
+{
+  "name": "hilo",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./app", "not_found_handling": "none" },
+  "workers_dev": true,
+  "preview_urls": false
+}
